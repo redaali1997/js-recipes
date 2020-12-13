@@ -7,13 +7,9 @@ db.collection('recipes').onSnapshot(snapshot => {
     snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
             list.innerHTML += `
-            <li data-id="${change.doc.id}">
-                <div class="row my-2">
-                    <div class="col-6">${change.doc.data().title}</div>
-                    <div class="col-6">
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </div>
-                </div>
+            <li data-id="${change.doc.id}" class="d-flex justify-content-between align-content-center">
+                <div>${change.doc.data().title}</div>
+                <button class="btn btn-danger btn-sm my-2">Delete</button>
             </li>
             `
         } else if (change.type === 'removed') {
@@ -38,6 +34,7 @@ form.addEventListener('submit', e => {
         title: form.addRecipes.value,
         created_at: firebase.firestore.Timestamp.fromDate(new Date())
     };
+    form.addRecipes.value = "";
     db.collection('recipes').add(recipe).then(() => {
         console.log('Recipe added.');
     })
